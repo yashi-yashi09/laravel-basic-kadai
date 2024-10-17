@@ -23,4 +23,30 @@ public function show($id) {
     return view('posts.show', compact('post'));
 }
 
+
+//投稿データの作成ページを表示する
+public function create() {
+    return view('posts.create');
+}
+
+//Request $request リクエスト情報の取得
+public function store(Request $request) {
+    //バリデーション設定
+    $request->validate([
+        'title' => 'required|max:20',
+        'content' => 'required|max:200'
+    ]);
+
+    // フォームの入力内容をもとに、テーブルにデータを追加する
+    // HTTPリクエストに含まれるtitle,contentパラメータの値を取得し、変数$postに代入す
+    $post = new Post();
+    $post->title = $request->input('title');
+    $post->content = $request->input('content');
+    $post->save();
+
+    // リダイレクトさせる
+    return redirect("/posts");
+
+}
+
 }
